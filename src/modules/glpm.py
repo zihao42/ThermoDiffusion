@@ -5,7 +5,6 @@ import logging
 import os
 from openai import OpenAI
 
-# 配置日志输出等级
 logging.basicConfig(level=logging.INFO)
 
 if "OPENAI_API_KEY" not in os.environ:
@@ -45,8 +44,7 @@ def generate_layout(parsed_json: dict) -> dict:
                 {"role": "user", "content": user_msg}
             ],
             temperature=0.3,
-            max_tokens=500,
-            request_timeout=60
+            max_tokens=500
         )
         logging.info("Received response from GPT-4 API for layout planning.")
         layout_str = response.choices[0].message.content
@@ -60,13 +58,13 @@ def generate_layout(parsed_json: dict) -> dict:
 if __name__ == "__main__":
     # 导入HPP模块，调用其parse_prompt函数
     try:
-        # 注意：确保 hpp.py 与当前文件在相同目录或者在 Python 导入路径中
+        # 确保 hpp.py 与当前文件在同一目录或者已在Python导入路径中
         from hpp import parse_prompt
     except ImportError as ie:
         logging.error("Failed to import parse_prompt from hpp.py. 请检查 hpp.py 模块位置。")
         raise ie
 
-    demo_prompt = "A white cat and two yellow dogs playing on the grass."
+    demo_prompt = "A white cat and two yellow dogs and three birds playing on the grass."
     try:
         # 先解析Prompt获取语义树状结构
         parsed_json = parse_prompt(demo_prompt)
